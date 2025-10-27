@@ -24,8 +24,8 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 
 	const conferenceName string = "Go Conference 2025"
-	const totalTickets int = 50
-	var remainingTickets int = 30
+	const totalTickets uint32 = 50
+	var remainingTickets uint32 = 50
 	var bookings = []string{}
 
 	fmt.Printf("Welcome to the %s booking application!\n", conferenceName)
@@ -47,15 +47,20 @@ func main() {
 		}
 
 		userTickets, err := userInput("Insert how many tickets you would like to buy: ", reader)
-		tickets, err := strconv.ParseUint(userTickets, 10, 0)
+		ticketsAmount64, err := strconv.ParseUint(userTickets, 10, 32)
 		if err != nil {
 			fmt.Println("Error while reading amount of tickets: ", err)
 			return
 		}
 
-		fmt.Printf("User %s has booked %d tickets. Purchased tickets are send to %s. \n", name, tickets, email)
+		var ticketsAmount32 uint32 = uint32(ticketsAmount64)
+
+		remainingTickets = remainingTickets - ticketsAmount32
 
 		bookings = append(bookings, name)
+
+		fmt.Printf("User %s has booked %d tickets. Purchased tickets are send to %s. \n", name, ticketsAmount32, email)
 		fmt.Println(bookings)
+		fmt.Println("The amount of remaing tickets is: ", remainingTickets)
 	}
 }
