@@ -55,6 +55,11 @@ func main() {
 
 		var ticketsAmount32 uint32 = uint32(ticketsAmount64)
 
+		if ticketsAmount32 > remainingTickets {
+			fmt.Printf("We only have %d tickets available.\n", remainingTickets)
+			continue
+		}
+
 		remainingTickets = remainingTickets - ticketsAmount32
 
 		bookings = append(bookings, name)
@@ -62,5 +67,11 @@ func main() {
 		fmt.Printf("User %s has booked %d tickets. Purchased tickets are send to %s. \n", name, ticketsAmount32, email)
 		fmt.Println(bookings)
 		fmt.Println("The amount of remaing tickets is: ", remainingTickets)
+
+		if remainingTickets == 0 {
+			// End the application
+			fmt.Println("Our converence is currently sold out. Come back next year!")
+			break
+		}
 	}
 }
